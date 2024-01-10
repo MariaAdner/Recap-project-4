@@ -1,19 +1,24 @@
 import React from "react";
 import { useState } from "react";
+import { uid } from "uid";
 
 export default function App() {
   return <Form />;
 }
 
 function Form() {
-  const [activities, setActivies] = useState("");
+  const [activities, setActivities] = useState("");
   const [goodWeather, setGoodWeather] = useState(false);
 
   function handleAddActivity(event) {
     event.preventDefault();
-    const newActivity = {id:...} 
 
-    
+    const newActivities = { id: uid(4), activities, goodWeather };
+
+    setActivities("");
+    setGoodWeather("");
+
+    console.log(newActivities);
   }
 
   return (
@@ -25,7 +30,7 @@ function Form() {
         <input
           type="text"
           value={activities}
-          onChange={(event) => setActivies(event.target.value)}
+          onChange={(event) => setActivities(event.target.value)}
         ></input>
         <br></br>
         <label>Good weather activity:</label>
