@@ -19,6 +19,7 @@ export default function App() {
   return (
     <div>
       <Form onAddActivity={handleAddActivity} />
+      <List activities={activities} />
     </div>
   );
 }
@@ -51,4 +52,10 @@ function Form({ onAddActivity }) {
       </form>
     </div>
   );
+}
+
+function List({ activities }) {
+  return activities.map((activity) => {
+    return <li key={activity.id}>{activity.name}</li>;
+  });
 }
