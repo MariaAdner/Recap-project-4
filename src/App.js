@@ -4,8 +4,11 @@ import { uid } from "uid";
 import useLocalStorageState from "use-local-storage-state";
 
 export default function App() {
-  const [activities, setActivities] =  useLocalStorageState("activities", { defaultValue:[]});
+  const [activities, setActivities] = useLocalStorageState("activities", {
+    defaultValue: [],
+  });
   const [goodWeather, setGoodWeather] = useState(false);
+
   function handleAddActivity(newActivity) {
     setActivities([
       ...activities,
@@ -16,11 +19,17 @@ export default function App() {
       },
     ]);
   }
-  console.log(activities);
+
+  const isGoodWeather = true;
+  const filteredActivities = activities.filter(
+    (activity) => activity.isForGoodWeather === isGoodWeather
+  );
+  //console.log(filteredActivities);
+
   return (
     <div>
       <Form onAddActivity={handleAddActivity} />
-      <List activities={activities} />
+      <List filteredActivities={filteredActivities} isGoodWeather />
     </div>
   );
 }
@@ -55,13 +64,13 @@ function Form({ onAddActivity }) {
   );
 }
 
-function List({ activities }) {
-  return activities.map((activity) => {
-    return <li key={activity.id}>{activity.name}</li>;
-  });
+function List({ filteredActivities, isGoodWeather }) {
+  return (
+    isGoodWeather && <p>"The weather is awesome! Go outside and:"</p>,
+    // (
+    // <p>"Bad weather outside! Here's what you can do now:"</p>
+    filteredActivities.map((activity) => {
+      return <li key={activity.id}>{activity.name}</li>;
+    })
+  );
 }
-
-
-  
-
-  
