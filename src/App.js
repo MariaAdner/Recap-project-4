@@ -1,9 +1,10 @@
 import React from "react";
 import { useState } from "react";
 import { uid } from "uid";
+import useLocalStorageState from "use-local-storage-state";
 
 export default function App() {
-  const [activities, setActivities] = useState([]);
+  const [activities, setActivities] =  useLocalStorageState("activities", { defaultValue:[]});
   const [goodWeather, setGoodWeather] = useState(false);
   function handleAddActivity(newActivity) {
     setActivities([
@@ -59,3 +60,8 @@ function List({ activities }) {
     return <li key={activity.id}>{activity.name}</li>;
   });
 }
+
+
+  
+
+  
