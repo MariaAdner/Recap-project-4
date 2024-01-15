@@ -2,12 +2,25 @@ import React from "react";
 import { useState } from "react";
 import { uid } from "uid";
 import useLocalStorageState from "use-local-storage-state";
+import { useEffect } from "react";
 
 export default function App() {
   const [activities, setActivities] = useLocalStorageState("activities", {
     defaultValue: [],
   });
   const [goodWeather, setGoodWeather] = useState(false);
+
+  useEffect(() => {
+    async function fetchWeather() {
+      const response = await fetch(
+        "https://example-apis.vercel.app/api/weather/europe"
+      );
+      const goodWeather = await response.json();
+      console.log(goodWeather);
+      setGoodWeather(goodWeather);
+    }
+    fetchWeather();
+  }, []);
 
   function handleAddActivity(newActivity) {
     setActivities([
@@ -20,7 +33,7 @@ export default function App() {
     ]);
   }
 
-  const isGoodWeather = true;
+  let isGoodWeather = goodWeather.isGoodWeather;
   const filteredActivities = activities.filter(
     (activity) => activity.isForGoodWeather === isGoodWeather
   );
@@ -28,8 +41,17 @@ export default function App() {
 
   return (
     <div>
+      <Weather goodWeather />
       <Form onAddActivity={handleAddActivity} />
       <List filteredActivities={filteredActivities} isGoodWeather />
+    </div>
+  );
+}
+
+function Weather({ goodWeather }) {
+  return (
+    <div>
+      <h1>{goodWeather.condition}</h1>
     </div>
   );
 }
@@ -66,11 +88,13 @@ function Form({ onAddActivity }) {
 
 function List({ filteredActivities, isGoodWeather }) {
   return (
-    isGoodWeather && <p>"The weather is awesome! Go outside and:"</p>,
-    // (
-    // <p>"Bad weather outside! Here's what you can do now:"</p>
-    filteredActivities.map((activity) => {
-      return <li key={activity.id}>{activity.name}</li>;
-    })
+    <>
+      <h2>{isGoodWeather ? "good" : "bad"} Weather Activities</h2>
+      <ul>
+        {filteredActivities.map((activity) => {
+          return <li key={activity.id}>{activity.name}</li>;
+        })}
+      </ul>
+    </>
   );
 }
